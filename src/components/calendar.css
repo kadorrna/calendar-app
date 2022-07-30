@@ -1,0 +1,14 @@
+thead{
+  background-color: #3074B5;
+  color: white;
+}
+
+td:first-child, td:last-child {
+  --bs-table-accent-bg: var(--bs-table-striped-bg);
+  color: var(--bs-table-striped-color);
+}
+
+td {
+  border-left: 1px solid;
+  border-bottom: 1px solid;
+}
