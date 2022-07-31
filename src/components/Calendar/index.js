@@ -1,5 +1,6 @@
-import { actualMonthToRender } from "../lib/date";
+import { actualMonthToRender } from "../../lib/date";
 import Table from "react-bootstrap/Table";
+import DayCell from "../DayCell";
 
 import "./calendar.css";
 
@@ -14,22 +15,17 @@ const week = [
 ];
 
 const Calendar = () => {
-  const dt = new Date();
-  const month = dt.getMonth();
-  const year = dt.getFullYear();
-  const daysInMonth = new Date(year, month, 0).getDate();
-  const firstDayInWeek = new Date(year, month, 1).getDay();
-
   const monthToRender = actualMonthToRender();
   const monthRows = monthToRender.length / 7;
-
   const renderMonths = () => {
     let table = [];
     for (let i = 0; i < monthRows; i++) {
       let children = [];
       for (let j = 0; j < 7; j++) {
         const position = 7 * i + j;
-        children.push(<td key={position}>{monthToRender[position].date}</td>);
+        children.push(
+          <DayCell dateInfo={monthToRender[position]} key={position} />
+        );
       }
       table.push(<tr key={i}>{children}</tr>);
     }
@@ -37,8 +33,6 @@ const Calendar = () => {
   };
   return (
     <>
-      year {year} month {month} days in month {daysInMonth} starts on{" "}
-      {firstDayInWeek}
       <Table responsive="sm">
         <thead>
           <tr>

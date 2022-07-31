@@ -1,0 +1,10 @@
+td div {
+  /* min-height: 10vh; */
+  text-align: left;
+  font-weight: bold;
+  cursor: pointer;
+  height: 100%;
+}
+div.nonActual {
+  color: #BBBBBB !important
+}
