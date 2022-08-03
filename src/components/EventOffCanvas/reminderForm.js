@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Formik } from "formik";
+import Client from "../../client";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
@@ -79,6 +80,13 @@ const ReminderForm = ({ date }) => {
     );
   };
 
+  const handleRegionChange = async (value) => {
+    console.log("country=", country, "value=", value);
+    const apiInfo = await Client.getWeatherInfo(value, country);
+    console.log("apiInfo", apiInfo);
+    selectRegion(value);
+  };
+
   return (
     <Formik
       initialValues={{
@@ -155,7 +163,7 @@ const ReminderForm = ({ date }) => {
               country={country}
               region={region}
               handleCountryChange={selectCountry}
-              handleRegionChange={selectRegion}
+              handleRegionChange={handleRegionChange}
             />
             {errors.geoLoc && touched.geoLoc && (
               <span className="error">{errors.geoLoc}</span>

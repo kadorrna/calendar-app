@@ -12,12 +12,14 @@ const CitySelector = ({
     <>
       <CountryDropdown
         value={country}
+        valueType="short"
         onChange={handleCountryChange}
         className="selectorSelect"
       />
       <RegionDropdown
         value={region}
         country={country}
+        countryValueType="short"
         onChange={handleRegionChange}
         className="selectorSelect"
       />

@@ -1,18 +1,7 @@
-import { actualMonthToRender } from "../../lib/date";
-import Table from "react-bootstrap/Table";
+import { actualMonthToRender, WEEK } from "../../lib/date";
 import DayCell from "../DayCell";
 
 import "./calendar.css";
-
-const week = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
 
 const Calendar = () => {
   const monthToRender = actualMonthToRender();
@@ -36,7 +25,7 @@ const Calendar = () => {
       {/* TODO: MOVE TO GRID */}
       <section id="calendar">
         <section id="calendar-header">
-          {week.map((day) => (
+          {WEEK.map((day) => (
             <div key={day}>{day}</div>
           ))}
         </section>
