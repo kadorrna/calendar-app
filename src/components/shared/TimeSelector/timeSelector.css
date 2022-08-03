@@ -1,0 +1,15 @@
+.react-time-picker {
+  padding: 0;
+}
+
+.react-time-picker__wrapper {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  background-clip: padding-box;
+  border-radius: 0.375rem;
+  border: 1px solid #ced4da;
+}
+
+.react-clock {
+  display: inline-block;
+}

@@ -18,7 +18,7 @@ const Calendar = () => {
   const monthToRender = actualMonthToRender();
   const monthRows = monthToRender.length / 7;
   const renderMonths = () => {
-    let table = [];
+    let grid = [];
     for (let i = 0; i < monthRows; i++) {
       let children = [];
       for (let j = 0; j < 7; j++) {
@@ -27,22 +27,21 @@ const Calendar = () => {
           <DayCell dateInfo={monthToRender[position]} key={position} />
         );
       }
-      table.push(<tr key={i}>{children}</tr>);
+      grid.push(children);
     }
-    return table;
+    return grid;
   };
   return (
     <>
-      <Table responsive="sm">
-        <thead>
-          <tr>
-            {week.map((day) => (
-              <th key={day}>{day}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>{renderMonths()}</tbody>
-      </Table>
+      {/* TODO: MOVE TO GRID */}
+      <section id="calendar">
+        <section id="calendar-header">
+          {week.map((day) => (
+            <div key={day}>{day}</div>
+          ))}
+        </section>
+        <section id="calendar-main">{renderMonths()}</section>
+      </section>
     </>
   );
 };

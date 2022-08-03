@@ -1,0 +1,14 @@
+.color-showcase {
+  margin: 0 5%;
+  width: 90%;
+}
+.selected-color-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+.div-color{
+  width:40px;
+  height:40px;
+  border-radius: 0.375rem;
+}

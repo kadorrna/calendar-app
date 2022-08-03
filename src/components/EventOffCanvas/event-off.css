@@ -1,0 +1,14 @@
+.row {
+  margin: 5vh 0
+}
+.error {
+  color: red;
+  background-color: rgb(205, 165, 165);
+}
+
+.colorPicked {
+  width:25px;
+  height:25px;
+  padding: 1%;
+  margin:10% 0;
+}

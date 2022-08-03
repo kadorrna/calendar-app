@@ -1,30 +1,20 @@
+import ReminderForm from "./reminderForm";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { MONTHS } from "../../lib/date";
+import "./event-off.css";
 
-const MONTHS = [
-  "Enero",
-  "Febrero",
-  "Marzo",
-  "Abril",
-  "Mayo",
-  "Junio",
-  "Julio",
-  "Agosto",
-  "Septiembre",
-  "Octubre",
-  "Noviembre",
-  "Diciembre",
-];
-
-const EventOffCanvas = ({ show, date }) => {
+const EventOffCanvas = ({ show, date, handleClose }) => {
   return (
     <>
-      <Offcanvas show={show}>
+      <Offcanvas show={show} onHide={handleClose}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
             {date.getDate()} - {MONTHS[date.getMonth()]}
           </Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>Description: Event Color:</Offcanvas.Body>
+        <Offcanvas.Body>
+          <ReminderForm date={date} />
+        </Offcanvas.Body>
       </Offcanvas>
     </>
   );

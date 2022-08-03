@@ -1,10 +1,10 @@
-td div {
-  /* min-height: 10vh; */
+.dayCell {
   text-align: left;
   font-weight: bold;
   cursor: pointer;
   height: 100%;
+  padding: 1% 0 0 5%;
 }
-div.nonActual {
-  color: #BBBBBB !important
+.dayCell.nonActual {
+  color: #BBBBBB !important;
 }

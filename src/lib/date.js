@@ -1,16 +1,32 @@
 const dt = new Date();
 const year = dt.getFullYear();
 
+export const MONTHS = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+
 export const monthToRender = (month) => {
+  // month para atras y ser consistente
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const daysInPreviousMonth = new Date(year, month, 0).getDate();
-  const monthFirstWeekDay = new Date(year, month, 1).getDay();
-  const monthLastWeekDay = new Date(year, month + 1, 1).getDay() - 1;
+  const firstWeekDayMonth = new Date(year, month, 1).getDay();
+  const lastWeekDayMonth = new Date(year, month + 1, 1).getDay() - 1;
   let monthCalendar = [];
 
   //add days from previous month to first week
-  if (monthFirstWeekDay > 0) {
-    for (let i = 0; i < monthFirstWeekDay; i++) {
+  if (firstWeekDayMonth > 0) {
+    for (let i = 0; i < firstWeekDayMonth; i++) {
       monthCalendar.push({
         date: new Date(year, month - 1, daysInPreviousMonth - i),
         events: [],
@@ -29,8 +45,8 @@ export const monthToRender = (month) => {
     });
   }
   // add next month days to round week
-  if (monthLastWeekDay < 6) {
-    const extraDays = monthLastWeekDay > 0 ? 6 - monthLastWeekDay : 6;
+  if (lastWeekDayMonth < 6) {
+    const extraDays = lastWeekDayMonth > 0 ? 6 - lastWeekDayMonth : 6;
     for (let i = 1; i <= extraDays; i++) {
       monthCalendar.push({
         date: new Date(year, month + 1, i),

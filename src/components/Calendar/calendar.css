@@ -1,3 +1,4 @@
+/*
 table {
   table-layout: fixed;
   height:100%;
@@ -18,10 +19,8 @@ thead tr th {
 tbody tr {
   height: 100px;
 }
-
 td:first-child, td:last-child {
   --bs-table-accent-bg: var(--bs-table-striped-bg);
-  /* color: var(--bs-table-striped-color); */
 }
 td:first-child div, td:last-child div {
   color: #4090db;
@@ -29,4 +28,37 @@ td:first-child div, td:last-child div {
 td {
   border-left: 1px solid;
   border-bottom: 1px solid;
+}
+*/
+
+#calendar{
+  display: grid;
+}
+
+#calendar-header{
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+}
+
+#calendar-header div {
+    background-color: #3074B5;
+    color: white;
+}
+#calendar-main {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  aspect-ratio: 1;
+}
+
+#calendar-main div {
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+#calendar-main div:nth-child(7n), #calendar-main div:nth-child(7n+1) {
+  --bs-table-accent-bg: var(--bs-table-striped-bg);
+  background-color: #F2F2F2;
+  color: #4090db;
 }

@@ -5,15 +5,24 @@ import "./dayCell.css";
 const DayCell = ({ dateInfo }) => {
   const [show, setShow] = useState(false);
 
-  const toggleCanvas = () => setShow(!show);
+  const handleClose = () => {
+    setShow(false);
+  };
+  const handleShow = () => {
+    setShow(true);
+  };
 
   return (
-    <td>
-      <div className={dateInfo.css} onClick={toggleCanvas}>
+    <>
+      <div className={`${dateInfo.css} dayCell`} onClick={handleShow}>
         {dateInfo.date.getDate()}
-        <EventOffCanvas show={show} date={dateInfo.date} />
       </div>
-    </td>
+      <EventOffCanvas
+        show={show}
+        date={dateInfo.date}
+        handleClose={handleClose}
+      />
+    </>
   );
 };
 
