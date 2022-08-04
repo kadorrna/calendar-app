@@ -12,3 +12,7 @@
   padding: 1%;
   margin:10% 0;
 }
+
+.weather-container {
+  height: 90px;
+}

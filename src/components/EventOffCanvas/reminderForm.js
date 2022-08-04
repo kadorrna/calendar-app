@@ -1,32 +1,24 @@
 import { useState } from "react";
-import { Formik } from "formik";
+import { Form, Formik, Field } from "formik";
 import Client from "../../client";
-import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
 
+import useReminders from "../../hooks/useReminders";
+
+import ErrorMessage from "../shared/ErrorMessage";
 import TimeSelectorComponent from "../shared/TimeSelector";
 import CitySelector from "../shared/CitySelector";
 import ColorPicker from "../shared/ColorPicker";
-
-const useReminders = (date) => {
-  const calendarId = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
-  let oldReminders = localStorage.getItem("calendar-demo-reminders");
-  oldReminders = oldReminders ? JSON.parse(oldReminders) : [];
-  const dateReminders =
-    oldReminders.length > 0
-      ? oldReminders.find((e) => e.id === calendarId)?.reminders
-      : [];
-
-  const bookedTimes = dateReminders?.map((e) => e.time) || [];
-
-  return { oldReminders, dateReminders, bookedTimes };
-};
+import WeatherSummary from "../shared/WeatherSummary";
 
 const ReminderForm = ({ date }) => {
   const [reminderColor, setReminderColor] = useState({ hex: "#dedede" });
   const [reminderTime, setReminderTime] = useState("10:00");
   const [country, selectCountry] = useState("");
   const [region, selectRegion] = useState("");
+  const [weather, setWeather] = useState("");
+  const [loading, setLoading] = useState(false);
   const { oldReminders, dateReminders, bookedTimes } = useReminders(date);
 
   const validDescriptionLength = (str) => {
@@ -42,13 +34,17 @@ const ReminderForm = ({ date }) => {
   };
 
   const handleSubmit = (values) => {
-    console.log("values", values);
     const calendarId = `${values.day}-${values.month}-${values.year}`;
     const newReminder = {
       time: values.reminderTime,
       geoLoc: values.geoLoc,
       color: values.color,
       description: values.description,
+      weather: {
+        icon: weather.icon,
+        desc: weather.description,
+        main: weather.main,
+      },
     };
     let updatedReminders;
     if (oldReminders && oldReminders.length > 0) {
@@ -81,10 +77,16 @@ const ReminderForm = ({ date }) => {
   };
 
   const handleRegionChange = async (value) => {
-    console.log("country=", country, "value=", value);
-    const apiInfo = await Client.getWeatherInfo(value, country);
-    console.log("apiInfo", apiInfo);
+    setLoading(true);
+    try {
+      const apiInfo = await Client.getWeatherInfo(value, country);
+      setWeather(apiInfo.list[0].weather[0]);
+    } catch {
+      setWeather({});
+    }
+
     selectRegion(value);
+    setLoading(false);
   };
 
   return (
@@ -105,10 +107,10 @@ const ReminderForm = ({ date }) => {
         if (!values.description) {
           errors.description = "Description needed";
         } else if (!validDescriptionLength(values.description)) {
-          errors.description = " Description cant have more than 30 words";
+          errors.description = "Description can't have more than 30 words";
         }
         if (bookedTimes.includes(values.reminderTime)) {
-          errors.time = "Time already booked for this day";
+          errors.reminderTime = "Time already booked for this day";
         }
         if (values.geoLoc.country === "" || values.geoLoc.region === "") {
           errors.geoLoc = "Select region and country";
@@ -125,34 +127,33 @@ const ReminderForm = ({ date }) => {
         handleSubmit,
         /* and other goodies */
       }) => (
-        <form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
           <div className="row">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
+            <Field
+              placeholder="Description"
               type="text"
               rows="20"
               name="description"
               onChange={handleChange}
               value={values.description}
             />
-            {errors.description && touched.description && (
-              <span className="error">{errors.description}</span>
-            )}
+            <ErrorMessage fieldError="description" />
           </div>
-          <div className="row justify-content">
+          <div className="row justify-content" data-testid="color-picker">
             <ColorPicker
               value={(values.color = reminderColor.hex)}
               handleChange={setReminderColor}
             />
           </div>
-          <div className="row">
+          <div className="row" data-testid="time-selector">
             <TimeSelectorComponent
               value={(values.reminderTime = reminderTime)}
               handleChange={setReminderTime}
+              name="reminderTime"
             />
-            {errors.time && <span className="error">{errors.time}</span>}
+            <ErrorMessage fieldError="reminderTime" />
           </div>
-          <div className="row">
+          <div className="row" data-testid="region-selector">
             <CitySelector
               value={
                 (values.geoLoc = {
@@ -164,17 +165,31 @@ const ReminderForm = ({ date }) => {
               region={region}
               handleCountryChange={selectCountry}
               handleRegionChange={handleRegionChange}
+              name="geoLoc"
             />
-            {errors.geoLoc && touched.geoLoc && (
-              <span className="error">{errors.geoLoc}</span>
+            <ErrorMessage fieldError="geoLoc" />
+
+            {weather && !loading && (
+              <div className="weather-container">
+                <WeatherSummary icon={weather.icon} main={weather.main} />
+              </div>
+            )}
+            {loading && (
+              <div className="weather-container d-flex allign-items-center justify-content-center">
+                <Spinner animation="grow" className="mt-4" />
+              </div>
             )}
           </div>
           <div className="row">
-            <Button type="submit" disabled={errors.length > 0}>
+            <Button
+              type="submit"
+              disabled={errors.length > 0}
+              data-testid="submitButton"
+            >
               Submit
             </Button>
           </div>
-        </form>
+        </Form>
       )}
     </Formik>
   );
