@@ -29,13 +29,12 @@ export const remindersSlice = createSlice({
   initialState,
   reducers: {
     addReminder: (state, { payload }) => {
-      let updatedReminders;
       if (
         state.remindersSaved &&
         state.remindersSaved.length > 0 &&
         dateHasReminders(state.remindersSaved, payload.calendarId)
       ) {
-        updatedReminders = state.remindersSaved.map((calendarReminder) => {
+        state.remindersSaved = state.remindersSaved.map((calendarReminder) => {
           if (calendarReminder.id === payload.calendarId) {
             const newReminders = [
               ...calendarReminder.reminders,
@@ -49,7 +48,6 @@ export const remindersSlice = createSlice({
           }
           return calendarReminder;
         });
-        state.remindersSaved = updatedReminders;
       } else {
         state.remindersSaved.push({
           id: payload.calendarId,
@@ -62,10 +60,30 @@ export const remindersSlice = createSlice({
         JSON.stringify(state.remindersSaved)
       );
     },
+    removeReminder: (state, { payload }) => {
+      state.remindersSaved = state.remindersSaved.map((calendarReminder) => {
+        if (calendarReminder.id === payload.calendarId) {
+          const newReminders = calendarReminder.reminders.filter(
+            (r) => r.time !== payload.reminderTimeToRemove
+          );
+          return { ...calendarReminder, reminders: newReminders };
+        }
+        return calendarReminder;
+      });
+    },
+    clearReminders: (state, { payload }) => {
+      state.remindersSaved = state.remindersSaved.map((calendarReminder) => {
+        if (calendarReminder.id === payload.calendarId) {
+          return { ...calendarReminder, reminders: [] };
+        }
+        return calendarReminder;
+      });
+    },
   },
 });
 
-export const { addReminder } = remindersSlice.actions;
+export const { addReminder, removeReminder, clearReminders } =
+  remindersSlice.actions;
 
 export const selectReminders = (state) => state.reminders.remindersSaved;
 

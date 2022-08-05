@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Form, Formik, Field } from "formik";
-import { useSelector, useDispatch } from "react-redux";
-import { addReminder, selectReminders } from "../../features/reminders";
+import { useDispatch } from "react-redux";
+import {
+  addReminder,
+  removeReminder as removeReminderFromReduxState,
+  clearReminders,
+} from "../../features/reminders";
 
 import Client from "../../client";
 import Button from "react-bootstrap/Button";
@@ -17,36 +21,19 @@ import WeatherSummary from "../shared/WeatherSummary";
 import ReminderList from "./reminderList";
 
 const ReminderForm = ({ date }) => {
+  const calendarId = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
   const dispatch = useDispatch();
-  const remindersInReduxState = useSelector(selectReminders);
+  const myRef = useRef(null);
+  const [reminderTimeToRemove, setReminderTimeToRemove] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+  const [description, setDescription] = useState("");
   const [reminderColor, setReminderColor] = useState({ hex: "#dedede" });
   const [reminderTime, setReminderTime] = useState("10:00");
   const [country, selectCountry] = useState("");
   const [region, selectRegion] = useState("");
-  const [weather, setWeather] = useState("");
+  const [weather, setWeather] = useState({});
   const [loading, setLoading] = useState(false);
   const { bookedTimes } = useBookedTimes(date);
-
-  const validDescriptionLength = (str) => {
-    const arr = str.split(" ");
-    return arr.filter((word) => word !== "").length < 30;
-  };
-
-  const handleSubmit = (values) => {
-    const calendarId = `${values.day}-${values.month}-${values.year}`;
-    const newReminder = {
-      time: values.reminderTime,
-      geoLoc: values.geoLoc,
-      color: values.color,
-      description: values.description,
-      weather: {
-        icon: weather.icon,
-        desc: weather.description,
-        main: weather.main,
-      },
-    };
-    dispatch(addReminder({ calendarId, newReminder }));
-  };
 
   const handleRegionChange = async (value) => {
     setLoading(true);
@@ -61,14 +48,68 @@ const ReminderForm = ({ date }) => {
     setLoading(false);
   };
 
+  const handleSubmit = (values) => {
+    if (isEdit) {
+      dispatch(
+        removeReminderFromReduxState({ calendarId, reminderTimeToRemove })
+      );
+    }
+    const newReminder = {
+      time: values.reminderTime,
+      geoLoc: values.geoLoc,
+      color: values.color,
+      description: values.description,
+      weather: {
+        icon: weather.icon,
+        desc: weather.description,
+        main: weather.main,
+      },
+    };
+    dispatch(addReminder({ calendarId, newReminder }));
+    resetForm();
+  };
+
+  const clearAllReminders = () => {
+    dispatch(clearReminders({ calendarId }));
+    resetForm();
+  };
+  const removeReminder = (value) => {
+    setReminderTimeToRemove(value.time);
+    dispatch(
+      removeReminderFromReduxState({ calendarId, reminderTimeToRemove })
+    );
+    resetForm();
+  };
+
+  const editReminder = (value) => {
+    myRef.current.focus();
+    setIsEdit(true);
+    setDescription(value.description);
+    setReminderTime(value.time);
+    setReminderTimeToRemove(reminderTime);
+    selectCountry(value.geoLoc.country);
+    selectRegion(value.geoLoc.region);
+    setReminderColor({ hex: value.color });
+    setWeather(value.weather);
+  };
+
+  const resetForm = () => {
+    myRef.current.focus();
+    setIsEdit(false);
+    setDescription("");
+    setReminderTime("");
+    setReminderTimeToRemove("");
+    selectCountry("");
+    selectRegion("");
+    setReminderColor({ hex: "#dedede" });
+    setWeather({});
+  };
+
   return (
     <Formik
       initialValues={{
-        description: "",
+        description,
         color: reminderColor,
-        year: date.getFullYear(),
-        month: date.getMonth(),
-        day: date.getDate(),
         geoLoc: {
           country,
           region,
@@ -78,10 +119,10 @@ const ReminderForm = ({ date }) => {
         const errors = {};
         if (!values.description) {
           errors.description = "Description needed";
-        } else if (!validDescriptionLength(values.description)) {
-          errors.description = "Description can't have more than 30 words";
+        } else if (values.description.length > 30) {
+          errors.description = "Description can't have more than 30 chars";
         }
-        if (bookedTimes.includes(values.reminderTime)) {
+        if (bookedTimes.includes(values.reminderTime) && !isEdit) {
           errors.reminderTime = "Time already booked for this day";
         }
         if (values.geoLoc.country === "" || values.geoLoc.region === "") {
@@ -102,12 +143,13 @@ const ReminderForm = ({ date }) => {
         <Form onSubmit={handleSubmit}>
           <div className="row">
             <Field
+              innerRef={myRef}
               placeholder="Description"
               type="text"
               rows="20"
               name="description"
-              onChange={handleChange}
-              value={values.description}
+              onChange={(e) => setDescription(e.target.value)}
+              value={(values.description = description)}
             />
             <ErrorMessage fieldError="description" />
           </div>
@@ -152,18 +194,21 @@ const ReminderForm = ({ date }) => {
               </div>
             )}
           </div>
-          {/* <div className="row my-0"> */}
-          <ReminderList date={date} />
-          {/* </div> */}
           <div className="row">
             <Button
               type="submit"
               disabled={errors.length > 0}
               data-testid="submitButton"
             >
-              Submit
+              {isEdit ? "Update reminder" : "Add new reminder"}
             </Button>
           </div>
+          <ReminderList
+            date={date}
+            editReminder={editReminder}
+            removeReminder={removeReminder}
+            clearAllReminders={clearAllReminders}
+          />
         </Form>
       )}
     </Formik>
