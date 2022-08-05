@@ -1,36 +1,35 @@
 import { useState } from "react";
 import { Form, Formik, Field } from "formik";
+import { useSelector, useDispatch } from "react-redux";
+import { addReminder, selectReminders } from "../../features/reminders";
+
 import Client from "../../client";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 
-import useReminders from "../../hooks/useReminders";
+import useBookedTimes from "../../hooks/useBookedTimes";
 
 import ErrorMessage from "../shared/ErrorMessage";
 import TimeSelectorComponent from "../shared/TimeSelector";
 import CitySelector from "../shared/CitySelector";
 import ColorPicker from "../shared/ColorPicker";
 import WeatherSummary from "../shared/WeatherSummary";
+import ReminderList from "./reminderList";
 
 const ReminderForm = ({ date }) => {
+  const dispatch = useDispatch();
+  const remindersInReduxState = useSelector(selectReminders);
   const [reminderColor, setReminderColor] = useState({ hex: "#dedede" });
   const [reminderTime, setReminderTime] = useState("10:00");
   const [country, selectCountry] = useState("");
   const [region, selectRegion] = useState("");
   const [weather, setWeather] = useState("");
   const [loading, setLoading] = useState(false);
-  const { oldReminders, dateReminders, bookedTimes } = useReminders(date);
+  const { bookedTimes } = useBookedTimes(date);
 
   const validDescriptionLength = (str) => {
     const arr = str.split(" ");
     return arr.filter((word) => word !== "").length < 30;
-  };
-
-  const getTimeAsNumberOfMinutes = (time) => {
-    var timeParts = time.split(":");
-
-    var timeInMinutes = timeParts[0] * 60 + timeParts[1];
-    return Number(timeInMinutes);
   };
 
   const handleSubmit = (values) => {
@@ -46,34 +45,7 @@ const ReminderForm = ({ date }) => {
         main: weather.main,
       },
     };
-    let updatedReminders;
-    if (oldReminders && oldReminders.length > 0) {
-      updatedReminders = oldReminders.map((calendarReminder) => {
-        if (calendarReminder.id === calendarId) {
-          const newReminders = [
-            ...calendarReminder.reminders,
-            newReminder,
-          ].sort(
-            (a, b) =>
-              getTimeAsNumberOfMinutes(a.time) -
-              getTimeAsNumberOfMinutes(b.time)
-          );
-          return { ...calendarReminder, reminders: newReminders };
-        }
-        return calendarReminder;
-      });
-    } else {
-      updatedReminders = [
-        {
-          id: calendarId,
-          reminders: [newReminder],
-        },
-      ];
-    }
-    localStorage.setItem(
-      "calendar-demo-reminders",
-      JSON.stringify(updatedReminders)
-    );
+    dispatch(addReminder({ calendarId, newReminder }));
   };
 
   const handleRegionChange = async (value) => {
@@ -180,6 +152,9 @@ const ReminderForm = ({ date }) => {
               </div>
             )}
           </div>
+          {/* <div className="row my-0"> */}
+          <ReminderList date={date} />
+          {/* </div> */}
           <div className="row">
             <Button
               type="submit"

@@ -4,6 +4,7 @@
   cursor: pointer;
   height: 100%;
   padding: 1% 0 0 5%;
+  overflow-y: scroll;
 }
 .dayCell.nonActual {
   color: #BBBBBB !important;

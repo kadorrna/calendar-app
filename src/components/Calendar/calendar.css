@@ -44,6 +44,7 @@ td {
 #calendar-header div {
     background-color: #3074B5;
     color: white;
+    font-weight: bolder;
 }
 #calendar-main {
   display: grid;

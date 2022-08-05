@@ -1,5 +1,6 @@
 import { useState } from "react";
 import EventOffCanvas from "../EventOffCanvas";
+import SmallReminderList from "../SmallReminderList";
 import "./dayCell.css";
 
 const DayCell = ({ dateInfo }) => {
@@ -16,6 +17,7 @@ const DayCell = ({ dateInfo }) => {
     <>
       <div className={`${dateInfo.css} dayCell`} onClick={handleShow}>
         {dateInfo.date.getDate()}
+        <SmallReminderList date={dateInfo.date} />
       </div>
       <EventOffCanvas
         show={show}

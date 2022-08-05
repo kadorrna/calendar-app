@@ -16,3 +16,12 @@
 .weather-container {
   height: 90px;
 }
+
+.reminder-container {
+  border-radius: 0.375rem;
+}
+
+.reminder-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
