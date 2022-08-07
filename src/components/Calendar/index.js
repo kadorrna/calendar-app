@@ -22,7 +22,6 @@ const Calendar = () => {
   };
   return (
     <>
-      {/* TODO: MOVE TO GRID */}
       <section id="calendar">
         <section id="calendar-header">
           {WEEK.map((day) => (

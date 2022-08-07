@@ -70,6 +70,10 @@ export const remindersSlice = createSlice({
         }
         return calendarReminder;
       });
+      localStorage.setItem(
+        "calendar-demo-reminders",
+        JSON.stringify(state.remindersSaved)
+      );
     },
     clearReminders: (state, { payload }) => {
       state.remindersSaved = state.remindersSaved.map((calendarReminder) => {
@@ -78,6 +82,10 @@ export const remindersSlice = createSlice({
         }
         return calendarReminder;
       });
+      localStorage.setItem(
+        "calendar-demo-reminders",
+        JSON.stringify(state.remindersSaved)
+      );
     },
   },
 });
