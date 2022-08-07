@@ -1,9 +1,9 @@
-import { screen, waitFor, within } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import user from "@testing-library/user-event";
 import { renderWithProviders } from "../test-utils";
 
-import ReminderForm from "../../components/EventOffCanvas/reminderForm";
+import ReminderForm from "../../components/Calendar/EventOffCanvas/reminderForm";
 
 const testingDate = new Date("2022-08-05T08:00:00");
 const longDescription = "this description is incorrect because is too long ";
@@ -101,10 +101,4 @@ describe("ReminderForm edit reminder", () => {
 
 function getDescription() {
   return screen.getByRole("textbox");
-}
-
-function getHourTime() {
-  return screen.getByRole("input", {
-    class: "react-time-picker__inputGroup__hour",
-  });
 }

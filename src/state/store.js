@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import remindersReducer from "../features/reminders";
+import remindersReducer from "./reminders";
 
 export default configureStore({
   reducer: {

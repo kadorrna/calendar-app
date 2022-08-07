@@ -1,22 +1,21 @@
 import { useState, useRef } from "react";
 import { Form, Formik, Field, ErrorMessage } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addReminder,
+  selectBookingsForDate,
   removeReminder as removeReminderFromReduxState,
-} from "../../features/reminders";
+} from "../../../state/reminders";
 
-import Client from "../../client";
+import Client from "../../../client";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 
-import useBookedTimes from "../../hooks/useBookedTimes";
-
-import FeedbackError from "../shared/FeedbackError";
-import TimeSelectorComponent from "../shared/TimeSelector";
-import CitySelector from "../shared/CitySelector";
-import ColorPicker from "../shared/ColorPicker";
-import WeatherSummary from "../shared/WeatherSummary";
+import FeedbackError from "../../shared/FeedbackError";
+import TimeSelectorComponent from "../../shared/TimeSelector";
+import CitySelector from "../../shared/CitySelector";
+import ColorPicker from "../../shared/ColorPicker";
+import WeatherSummary from "../../shared/WeatherSummary";
 
 const ReminderForm = ({ date, hideForm, initialFormValues }) => {
   const calendarId = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
@@ -35,7 +34,8 @@ const ReminderForm = ({ date, hideForm, initialFormValues }) => {
   const [region, selectRegion] = useState(initialFormValues.geoLoc.region);
   const [weather, setWeather] = useState(initialFormValues.weather);
   const [loading, setLoading] = useState(false);
-  const { bookedTimes } = useBookedTimes(date);
+
+  const bookedTimes = useSelector(selectBookingsForDate(calendarId));
 
   const isTimeAlreadyBooked = () => {
     if (!isEdit) {

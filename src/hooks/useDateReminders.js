@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectRemindersForDate } from "../features/reminders";
+import { selectRemindersForDate } from "../state/reminders";
 
 const useDateReminders = (date) => {
   const calendarId = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;

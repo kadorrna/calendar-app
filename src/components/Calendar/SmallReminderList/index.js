@@ -1,4 +1,4 @@
-import useDateReminders from "../../hooks/useDateReminders";
+import useDateReminders from "../../../hooks/useDateReminders";
 import "./small-reminder-list.css";
 
 const SmallReminderList = ({ date }) => {

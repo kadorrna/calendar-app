@@ -4,10 +4,10 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import {
   removeReminder as removeReminderFromReduxState,
   clearReminders,
-} from "../../features/reminders";
+} from "../../../state/reminders";
 import ReminderForm from "./reminderForm";
 import ReminderList from "./reminderList";
-import { MONTHS } from "../../lib/date";
+import { MONTHS } from "../../../modules/date";
 import "./event-off.css";
 
 const defaultFormValues = {
