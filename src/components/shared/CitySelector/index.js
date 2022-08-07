@@ -15,6 +15,7 @@ const CitySelector = ({
         valueType="short"
         onChange={handleCountryChange}
         className="selectorSelect"
+        name="countrySelect"
       />
       <RegionDropdown
         value={region}
@@ -22,6 +23,7 @@ const CitySelector = ({
         countryValueType="short"
         onChange={handleRegionChange}
         className="selectorSelect"
+        name="regionSelect"
       />
     </>
   );

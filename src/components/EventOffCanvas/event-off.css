@@ -24,10 +24,9 @@
 .reminders-list {  
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: 200px;
+  max-height: 70%;
 }
 .reminder-actions {
-  /* */
   border-radius: 0.375rem;
   cursor: pointer;
 }

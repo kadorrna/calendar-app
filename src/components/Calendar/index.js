@@ -1,10 +1,16 @@
-import { actualMonthToRender, WEEK } from "../../lib/date";
+import { useState } from "react";
+import { WEEK, monthToRender as libMonthToRender } from "../../lib/date";
 import DayCell from "../DayCell";
+import CalendarMonthYearSelector from "./CalendarMonthYearSelector";
 
 import "./calendar.css";
 
 const Calendar = () => {
-  const monthToRender = actualMonthToRender();
+  const [calendarDate, setCalendarDate] = useState(new Date());
+  const [monthToRender, setMonthToRender] = useState(
+    libMonthToRender(calendarDate.getMonth(), calendarDate.getFullYear())
+  );
+
   const monthRows = monthToRender.length / 7;
   const renderMonths = () => {
     let grid = [];
@@ -20,8 +26,20 @@ const Calendar = () => {
     }
     return grid;
   };
+
+  const updateCalendarRender = (date) => {
+    setMonthToRender(libMonthToRender(date.getMonth(), date.getFullYear()));
+    setCalendarDate(date);
+  };
+
   return (
     <>
+      <section id="monthAndYear">
+        <CalendarMonthYearSelector
+          calendarDate={calendarDate}
+          updateCalendar={(date) => updateCalendarRender(date)}
+        />
+      </section>
       <section id="calendar">
         <section id="calendar-header">
           {WEEK.map((day) => (

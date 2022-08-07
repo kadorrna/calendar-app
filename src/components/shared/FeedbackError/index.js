@@ -1,5 +1,7 @@
-const FeedbackError = ({ msg }) => (
-  <div style={{ color: "red", textAlign: "left" }}>{msg}</div>
+const FeedbackError = ({ msg, testId }) => (
+  <div data-testid={testId} style={{ color: "red", textAlign: "left" }}>
+    {msg}
+  </div>
 );
 
 export default FeedbackError;

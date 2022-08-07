@@ -1,13 +1,12 @@
 import useDateReminders from "../../hooks/useDateReminders";
+import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPencil,
   faTrashCan,
   faBroom,
   faClock,
   faCloudSunRain,
   faLocationDot,
-  faCircle,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -48,10 +47,7 @@ const ReminderList = ({
                 </div>
               </div>
               <div className="row py-2">
-                <div className="col-12">
-                  <FontAwesomeIcon icon={faCircle} />
-                  {e.description}
-                </div>
+                <div className="col-12">{e.description}</div>
               </div>
             </div>
 
@@ -67,31 +63,30 @@ const ReminderList = ({
   }
   return (
     <>
-      <>
-        <h2>Reminders</h2>
-        <div className="row mx-0 reminders-list-header">
-          <div
-            className="col-6 text-start px-0 mb-3 header-action"
-            onClick={() => addReminder()}
-          >
+      <h2>Reminders</h2>
+      <div className="row mx-0 reminders-list-header mb-4">
+        <div className="col-6 px-0 text-start">
+          <Button onClick={() => addReminder()} variant="outline-secondary">
             add new reminder
             <FontAwesomeIcon icon={faPlus} />
-          </div>
-          <div className="col-3" />
-          {reminders.length > 0 && (
-            <div
-              className="col-3 text-end px-0 mb-3 header-action"
+          </Button>
+        </div>
+
+        {reminders.length > 0 && (
+          <div className="col-6 px-0 text-end">
+            <Button
               onClick={() => clearAllReminders()}
+              variant="outline-secondary"
             >
               clear all
               <FontAwesomeIcon icon={faBroom} />
-            </div>
-          )}
-        </div>
-        {reminders.length > 0 && (
-          <div className="reminders-list">{reminders}</div>
+            </Button>
+          </div>
         )}
-      </>
+      </div>
+      {reminders.length > 0 && (
+        <div className="reminders-list">{reminders}</div>
+      )}
     </>
   );
 };

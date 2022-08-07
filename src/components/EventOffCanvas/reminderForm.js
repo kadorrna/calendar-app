@@ -19,7 +19,6 @@ import ColorPicker from "../shared/ColorPicker";
 import WeatherSummary from "../shared/WeatherSummary";
 
 const ReminderForm = ({ date, hideForm, initialFormValues }) => {
-  console.log(initialFormValues);
   const calendarId = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
   const dispatch = useDispatch();
   const myRef = useRef(null);
@@ -80,19 +79,6 @@ const ReminderForm = ({ date, hideForm, initialFormValues }) => {
     dispatch(addReminder({ calendarId, newReminder }));
     resetForm();
     hideForm();
-  };
-
-  const editReminder = (value) => {
-    console.log("EDIT REMINDEr", value);
-    myRef.current.focus();
-    setIsEdit(true);
-    setDescription(value.description);
-    setTime(value.time);
-    setReminderTimeToRemove(time);
-    selectCountry(value.geoLoc.country);
-    selectRegion(value.geoLoc.region);
-    setReminderColor({ hex: value.color });
-    setWeather(value.weather);
   };
 
   const resetForm = () => {
@@ -158,7 +144,9 @@ const ReminderForm = ({ date, hideForm, initialFormValues }) => {
             />
             <ErrorMessage
               name="description"
-              render={(msg) => <FeedbackError msg={msg} />}
+              render={(msg) => (
+                <FeedbackError testId="description-error" msg={msg} />
+              )}
             />
           </div>
           <div className="row justify-content my-4" data-testid="color-picker">
@@ -176,7 +164,7 @@ const ReminderForm = ({ date, hideForm, initialFormValues }) => {
             <ErrorMessage
               component="span"
               name="time"
-              render={(msg) => <FeedbackError msg={msg} />}
+              render={(msg) => <FeedbackError testId="time-error" msg={msg} />}
             />
           </div>
           <div className="row my-3" data-testid="region-selector">
@@ -195,7 +183,9 @@ const ReminderForm = ({ date, hideForm, initialFormValues }) => {
             />
             <ErrorMessage
               name="geoLoc"
-              render={(msg) => <FeedbackError msg={msg} />}
+              render={(msg) => (
+                <FeedbackError testId="geoLoc-error" msg={msg} />
+              )}
             />
 
             {weather && !loading && (

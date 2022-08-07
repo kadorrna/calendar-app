@@ -10,9 +10,11 @@ const SmallReminderList = ({ date }) => {
       reminders.push(
         <div
           key={e.time}
-          className="small-reminder m-1"
+          className="small-reminder m-1 text-center"
           style={{ background: e.color }}
-        ></div>
+        >
+          {e.time}
+        </div>
       )
     );
   }

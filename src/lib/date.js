@@ -1,6 +1,3 @@
-const dt = new Date();
-const year = dt.getFullYear();
-
 export const MONTHS = [
   "January",
   "February",
@@ -26,19 +23,38 @@ export const WEEK = [
   "Saturday",
 ];
 
-export const monthToRender = (month) => {
-  // month para atras y ser consistente
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const daysInPreviousMonth = new Date(year, month, 0).getDate();
-  const firstWeekDayMonth = new Date(year, month, 1).getDay();
-  const lastWeekDayMonth = new Date(year, month + 1, 1).getDay() - 1;
+const nextMonthInCalendar = (fullYear, month) => {
+  if (month === 11) {
+    return {
+      month: 0,
+      year: fullYear + 1,
+    };
+  }
+
+  return {
+    month: month + 1,
+    year: fullYear,
+  };
+};
+
+export const monthToRender = (month, fullYear) => {
+  const nextInCalendar = nextMonthInCalendar(fullYear, month);
+  const daysInMonth = new Date(
+    nextInCalendar.year,
+    nextInCalendar.month,
+    0
+  ).getDate();
+  const daysInPreviousMonth = new Date(fullYear, month, 0).getDate();
+  const firstWeekDayMonth = new Date(fullYear, month, 1).getDay();
+  const lastWeekDayMonth =
+    new Date(nextInCalendar.year, nextInCalendar.month, 1).getDay() - 1;
   let monthCalendar = [];
 
   //add days from previous month to first week
   if (firstWeekDayMonth > 0) {
     for (let i = 0; i < firstWeekDayMonth; i++) {
       monthCalendar.push({
-        date: new Date(year, month - 1, daysInPreviousMonth - i),
+        date: new Date(fullYear, month - 1, daysInPreviousMonth - i),
         events: [],
         css: "nonActual",
       });
@@ -49,24 +65,21 @@ export const monthToRender = (month) => {
   // add all days from month
   for (let i = 1; i <= daysInMonth; i++) {
     monthCalendar.push({
-      date: new Date(year, month, i),
+      date: new Date(fullYear, month, i),
       events: [],
       css: "",
     });
   }
   // add next month days to round week
-  if (lastWeekDayMonth < 6) {
-    const extraDays = lastWeekDayMonth > 0 ? 6 - lastWeekDayMonth : 6;
+  if (lastWeekDayMonth < 6 && lastWeekDayMonth >= 0) {
+    const extraDays = 6 - lastWeekDayMonth;
     for (let i = 1; i <= extraDays; i++) {
       monthCalendar.push({
-        date: new Date(year, month + 1, i),
+        date: new Date(nextInCalendar.year, nextInCalendar.month, i),
         events: [],
         css: "nonActual",
       });
     }
   }
-
   return monthCalendar;
 };
-
-export const actualMonthToRender = () => monthToRender(dt.getMonth());
