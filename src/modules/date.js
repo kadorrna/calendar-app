@@ -37,7 +37,7 @@ const nextMonthInCalendar = (fullYear, month) => {
   };
 };
 
-export const monthToRender = (month, fullYear) => {
+export const monthToRender = (fullYear, month) => {
   const nextInCalendar = nextMonthInCalendar(fullYear, month);
   const daysInMonth = new Date(
     nextInCalendar.year,

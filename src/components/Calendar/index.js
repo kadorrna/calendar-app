@@ -20,10 +20,10 @@ const Calendar = () => {
   const [calendarDate, setCalendarDate] = useState(new Date());
 
   const [monthToRender, setMonthToRender] = useState(
-    libMonthToRender(calendarDate.getMonth(), calendarDate.getFullYear())
+    libMonthToRender(calendarDate.getFullYear(), calendarDate.getMonth())
   );
   const updateCalendarRender = (date) => {
-    setMonthToRender(libMonthToRender(date.getMonth(), date.getFullYear()));
+    setMonthToRender(libMonthToRender(date.getFullYear(), date.getMonth()));
     setCalendarDate(date);
   };
 
