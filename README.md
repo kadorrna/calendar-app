@@ -1,6 +1,28 @@
-# Getting Started with Create React App
+# Calendar app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## This was part of an interview process
+
+### [App deployed on Heroku](https://kado-calendar-app.herokuapp.com/)
+
+## This was made with the following packages and apis
+
+
+### Packages:
+- for the icons [FontAwesome](https://fontawesome.com/v5/docs/web/use-with/react)
+- for a little bit of css [React Bootstrap](https://react-bootstrap.github.io/)
+- forms were built with [Formik](https://formik.org/)
+- to select the reminder colors [React color](https://casesandberg.github.io/react-color/)
+- to select [Country/Region](https://country-regions.github.io/react-country-region-selector/)
+- the [time selector](https://github.com/wojtekmaj/react-time-picker#readme)
+- state container [Redux](https://redux.js.org/)
+
+
+## Api
+### [Weather Api](https://openweathermap.org/)
+
+***
+
+# This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
