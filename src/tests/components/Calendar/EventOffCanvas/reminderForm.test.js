@@ -1,9 +1,11 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import user from "@testing-library/user-event";
-import { renderWithProviders } from "../test-utils";
+import * as redux from "react-redux";
 
-import ReminderForm from "../../components/Calendar/EventOffCanvas/reminderForm";
+import { renderWithProviders } from "../../../test-utils";
+
+import ReminderForm from "../../../../components/Calendar/EventOffCanvas/reminderForm";
 
 const testingDate = new Date("2022-08-05T08:00:00");
 const longDescription = "this description is incorrect because is too long ";
@@ -22,6 +24,11 @@ const defaultFormValues = {
   },
   weather: {},
 };
+
+jest.mock("react-redux", () => ({
+  ...jest.requireActual("react-redux"),
+  useSelector: jest.fn(),
+}));
 
 describe("ReminderForm create reminder", () => {
   beforeEach(() => {
@@ -63,12 +70,28 @@ describe("ReminderForm create reminder", () => {
   });
 
   describe("when missng time", () => {
+    const spy = jest.spyOn(redux, "useSelector");
+    spy.mockReturnValue({ selectBookingsForDate: ["10:00AM"] });
+
     test("should show time errors", async () => {
+      let validationErrors;
       user.type(getDescription(), "test description");
       user.click(screen.getByRole("button", { name: /Create/i }));
-
       await waitFor(() => {
-        expect(screen.queryByTestId("time-error")).toBeInTheDocument();
+        validationErrors = screen.findByTestId("time-error");
+        expect(validationErrors).not.toBe(null);
+      });
+
+      user.type(getHour(), "10");
+      await waitFor(() => {
+        validationErrors = screen.findByTestId("time-error");
+        expect(validationErrors).not.toBe(null);
+      });
+
+      user.type(getMinutes(), "20");
+      await waitFor(() => {
+        validationErrors = screen.findByTestId("time-error");
+        expect(validationErrors).not.toBe(null);
       });
     });
   });
@@ -111,4 +134,16 @@ describe("ReminderForm edit reminder", () => {
 
 function getDescription() {
   return screen.getByRole("textbox");
+}
+
+function getHour() {
+  return screen.findByRole("spinbutton", { name: /hour12/i });
+}
+
+function getMinutes() {
+  return screen.findByRole("spinbutton", { name: /minute/i });
+}
+
+function getTimeSelector() {
+  return screen.getByDisplayValue("--");
 }

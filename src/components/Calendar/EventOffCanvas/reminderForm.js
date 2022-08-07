@@ -139,7 +139,6 @@ const ReminderForm = ({ date, hideForm, initialFormValues }) => {
               innerRef={myRef}
               placeholder="Description"
               type="text"
-              rows="20"
               name="description"
               onChange={(e) => setDescription(e.target.value)}
               value={(values.description = description)}

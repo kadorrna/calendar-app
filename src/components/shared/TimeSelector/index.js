@@ -1,5 +1,4 @@
 import TimePicker from "react-time-picker";
-
 import "./timeSelector.css";
 
 const TimeSelectorComponent = ({ value, handleChange }) => {
