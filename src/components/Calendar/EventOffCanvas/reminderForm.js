@@ -110,7 +110,9 @@ const ReminderForm = ({ date, hideForm, initialFormValues }) => {
         } else if (values.description.length > 30) {
           errors.description = "Description can't have more than 30 chars";
         }
-        if (isTimeAlreadyBooked()) {
+        if (!values.time) {
+          errors.time = "Please add a valid time";
+        } else if (isTimeAlreadyBooked()) {
           errors.time = "Time already booked for this day";
         }
         if (values.geoLoc.country === "" || values.geoLoc.region === "") {

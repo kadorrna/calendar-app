@@ -17,7 +17,7 @@ const defaultFormValues = {
   reminderColor: {
     hex: "#dedede",
   },
-  time: "10:00",
+  time: "",
   geoLoc: {
     region: "",
     country: "",

@@ -15,7 +15,7 @@ const defaultFormValues = {
   reminderColor: {
     hex: "#dedede",
   },
-  time: "10:00",
+  time: "",
   geoLoc: {
     region: "",
     country: "",
@@ -24,9 +24,8 @@ const defaultFormValues = {
 };
 
 describe("ReminderForm create reminder", () => {
-  let container;
   beforeEach(() => {
-    container = renderWithProviders(
+    renderWithProviders(
       <ReminderForm date={testingDate} initialFormValues={defaultFormValues} />
     );
   });
@@ -59,6 +58,17 @@ describe("ReminderForm create reminder", () => {
         expect(
           screen.getByText("Description can't have more than 30 chars")
         ).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe("when missng time", () => {
+    test("should show time errors", async () => {
+      user.type(getDescription(), "test description");
+      user.click(screen.getByRole("button", { name: /Create/i }));
+
+      await waitFor(() => {
+        expect(screen.queryByTestId("time-error")).toBeInTheDocument();
       });
     });
   });
